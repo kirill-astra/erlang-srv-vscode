@@ -1,0 +1,11 @@
+erlang-srv
+!erlang-srv/erlang_srv
+!erlang-srv/images/logo-small.png
+
+.vscode/**
+**/*.ts
+**/*.map
+.gitignore
+.gitmodules
+**/tsconfig.json
+**/.eslintrc.json

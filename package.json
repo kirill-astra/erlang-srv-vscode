@@ -1,0 +1,375 @@
+{
+	"name": "erlang-srv",
+	"displayName": "Erlang SRV",
+	"description": "The Visual Studio Code Extension for the Erlang Language Server",
+	"author": "kirill-astra",
+	"publisher": "kirill-astra",
+	"license": "Apache-2.0",
+	"version": "0.1.0",
+	"icon": "erlang-srv/images/logo-small.png",
+	"categories": [
+		"Programming Languages"
+	],
+	"engines": {
+		"vscode": "^1.64.0"
+	},
+	"activationEvents": [
+		"onLanguage:erlang"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kirill-astra/erlang-srv-vscode.git"
+	},
+	"main": "./out/extension.js",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Erlang SRV",
+			"properties": {
+				"erlangSrv.serverPath": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"order": 0,
+					"description": "Override the default path of the Erlang SRV executable with a custom one."
+				},
+				"erlangSrv.logPath": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"order": 1,
+					"description": "Override the default directory Erlang SRV logs to."
+				},
+				"erlangSrv.logLevel": {
+					"scope": "window",
+					"enum": [
+						"emergency",
+						"alert",
+						"critical",
+						"error",
+						"warning",
+						"notice",
+						"info",
+						"debug",
+						"all",
+						"none"
+					],
+					"default": "info",
+					"order": 2,
+					"description": "Log level of language server."
+				},
+				"erlangSrv.logOtp": {
+					"scope": "window",
+					"type": "boolean",
+					"default": false,
+					"order": 3,
+					"description": "Log otp/sasl events."
+				},
+				"erlangSrv.configPath": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"order": 4,
+					"description": "Path to the config file. Values in the config file override 'Erlang Srv > Config: ...'"
+				},
+				"erlangSrv.config.subProjDirs": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [
+						"_checkouts"
+					],
+					"order": 5,
+					"description": "List of directories containing sub-projects."
+				},
+				"erlangSrv.config.subProjs": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"order": 5,
+					"description": "List of sub projects."
+				},
+				"erlangSrv.config.depDirs": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [
+						"deps",
+						"_build/default/lib"
+					],
+					"order": 5,
+					"description": "List of directories containing dependencies."
+				},
+				"erlangSrv.config.deps": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"order": 5,
+					"description": "List of dependencies."
+				},
+				"erlangSrv.config.appsIgnore": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"order": 5,
+					"description": "List of applications to exclude from analysis."
+				},
+				"erlangSrv.config.dirsToScan": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [
+						"src",
+						"include",
+						"test"
+					],
+					"order": 5,
+					"description": "Subdirectories to recursively analyze. Used both for project and dependency applications."
+				},
+				"erlangSrv.config.includeDirs": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [
+						"include",
+						"src/hrl"
+					],
+					"order": 5,
+					"description": "List of directories used by diagnostic modules as include dirs."
+				},
+				"erlangSrv.config.extraPaths": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"order": 5,
+					"description": "List of directories to add into erlang code server by code:add_path/1."
+				},
+				"erlangSrv.config.erlangDistributionMode": {
+					"scope": "window",
+					"enum": [
+						"shortnames",
+						"longnames"
+					],
+					"default": "shortnames",
+					"order": 5,
+					"description": "Erlang distribution mode used by language server erlang VM."
+				},
+				"erlangSrv.config.dedicatedOtpNode": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"order": 5,
+					"description": "Whether or not to start dedicated erlang node for OTP files handling. Such node can be shared between Erlang SRV instances. Basically, it speeds up initializing."
+				},
+				"erlangSrv.config.macros": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^-define(.*,.*)\\.?$"
+					},
+					"default": [],
+					"order": 5,
+					"description": "Predefined macros used during analysis. Format: -define(KEY, VALUE)."
+				},
+				"erlangSrv.config.diagnostic.compiler": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"order": 6,
+					"description": "Enable compile diagnostic."
+				},
+				"erlangSrv.config.diagnosticCompiler.deployNode": {
+					"scope": "window",
+					"type": "string",
+					"pattern": "^.+@.+$|^$",
+					"default": "",
+					"order": 6,
+					"description": "Erlang node to deploy compiled modules."
+				},
+				"erlangSrv.config.diagnosticCompiler.deployCookie": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"order": 6,
+					"description": "Distributed erlang magic cookie used for compiled modules deployment. "
+				},
+				"erlangSrv.config.diagnosticCompiler.options": {
+					"scope": "window",
+					"type": "string",
+					"default": "[]",
+					"pattern": "^\\[.*\\]$",
+					"order": 6,
+					"description": "Erlang term representing compile options list."
+				},
+				"erlangSrv.config.diagnostic.xref": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"order": 7,
+					"description": "Enable xref diagnostic."
+				},
+				"erlangSrv.config.diagnosticXref.SkipModules": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"order": 7,
+					"description": "List of module names to skip during analysis."
+				},
+				"erlangSrv.config.diagnosticXref.SkipFunctions": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^.*:.*$"
+					},
+					"default": [
+						"lager:debug",
+						"lager:info",
+						"lager:notice",
+						"lager:warning",
+						"lager:error",
+						"lager:critical",
+						"lager:alert",
+						"lager:emergency"
+					],
+					"order": 7,
+					"description": "List of module:function[/arity] to skip during analysis."
+				},
+				"erlangSrv.config.diagnosticXref.SkipTypes": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^.*:.*$"
+					},
+					"default": [],
+					"order": 7,
+					"description": "List of module:type[/arity] to skip during analysis."
+				},
+				"erlangSrv.config.diagnostic.elvis": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"order": 8,
+					"description": "Enable elvis diagnostic."
+				},
+				"erlangSrv.config.diagnosticElvis.ConfigPath": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"order": 8,
+					"description": "Elvis config file to use if there is no elvis.config in the project root directory."
+				},
+				"erlangSrv.config.diagnostic.unusedMacros": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"order": 9,
+					"description": "Enable unused macros diagnostic."
+				},
+				"erlangSrv.config.diagnosticUnusedMacros.SkipModules": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"order": 9,
+					"description": "List of module names to skip during analysis."
+				},
+				"erlangSrv.config.diagnosticUnusedMacros.SkipMacros": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^.*:.*?$"
+					},
+					"default": [],
+					"order": 9,
+					"description": "List of module:macro[/arity] to skip during analysis."
+				},
+				"erlangSrv.config.diagnostic.dialyzer": {
+					"scope": "window",
+					"type": "boolean",
+					"default": false,
+					"order": 10,
+					"description": "Enable dialyzer diagnostic. WARNING: dialyzer diagnostic may take too much time."
+				},
+				"erlangSrv.config.diagnosticDialyzer.plts": {
+					"scope": "window",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"order": 10,
+					"description": "List of plt files to use during analysis. Default plt files used if no one appointed."
+				}
+			}
+		},
+		"languages": [
+			{
+				"id": "erlang",
+				"aliases": [
+					"Erlang"
+				],
+				"extensions": [
+					".erl",
+					".hrl",
+					".src",
+					".escript",
+					"sys.config",
+					"rebar.config"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "erlang",
+				"scopeName": "source.erlang",
+				"path": "./syntaxes/erlang.json"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run submodules && npm install && npm run compile",
+		"submodules": "git submodule update --init --recursive",
+		"build_server": "make -C erlang-srv/",
+		"compile": "npm run build_server && tsc -b",
+		"watch": "npm run build_server && tsc -b -w"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^7.0.0"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.64.0",
+		"@types/node": "^14.x",
+		"@typescript-eslint/parser": "^5.9.1",
+		"eslint": "^8.6.0",
+		"typescript": "^4.5.4",
+		"vsce": "^1.100.1"
+	}
+}

@@ -1,0 +1,4 @@
+[submodule "erlang-srv"]
+    path = erlang-srv
+    url = https://github.com/kirill-astra/erlang-srv.git
+    tag = 0.1.0

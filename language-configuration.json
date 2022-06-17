@@ -1,0 +1,90 @@
+{
+    "comments": {
+      "lineComment": "%"
+    },
+    "brackets": [
+      [ "(", ")" ],
+      [ "[", "]" ],
+      [ "{", "}" ],
+      [ "case", "end" ],
+      [ "if", "end" ],
+      [ "receive", "end" ],
+      [ "begin", "end" ],
+      [ "try", "end" ],
+      [ "fun", "end" ],
+      [ "maybe", "end" ]
+    ],
+    "autoClosingPairs": [
+      [ "(", ")" ],
+      [ "[", "]" ],
+      [ "{", "}" ],
+      { "open": "'", "close": "'", "notIn": [ "string", "comment" ] },
+      { "open": "\"", "close": "\"", "notIn": [ "string" ] },
+      { "open": "<<\"", "close": "\">>", "notIn": [ "string" ] }
+    ],
+    "surroundingPairs": [
+      [ "(", ")" ],
+      [ "[", "]" ],
+      [ "{", "}" ],
+      [ "'", "'" ],
+      [ "\"", "\"" ]
+    ],
+    "indentationRules": {
+      "increaseIndentPattern": "^((?!%).)*([\\{\\[\\(])\\s*$",
+      "indentNextLinePattern": "^((?!%).)*(::|=>|:=|<-|\\|\\|)\\s*$"
+    },
+    "onEnterRules": [
+      {
+        "beforeText": "^((?!%).)*(^|\\s)(after|begin|case|catch|fun|if|of|receive|try|=|->)\\s*$",
+        "action": {
+          "indent": "indent"
+        }
+      },
+      {
+        "beforeText": "^((?!%).)*\\s(and|andalso|band|bor|bsl|bsr|bxor|div|rem|or|orelse|when|xor)\\s*$",
+        "action": {
+          "indent": "none"
+        }
+      },
+      {
+        "beforeText": "^((?!%).)*->.*;\\s*$",
+        "action": {
+          "indent": "none"
+        }
+      },
+      {
+        "beforeText": "^$",
+        "afterText": "^$",
+        "action": {
+          "indent": "none"
+        }
+      },
+      {
+        "beforeText": "^((?!%).)*([;.'\"\\)\\]\\}\\w]|>>)\\s*$",
+        "action": {
+          "indent": "outdent"
+        }
+      },
+      {
+        "beforeText": "^\\s*%%%",
+        "action": {
+          "indent": "none",
+          "appendText": "%%% "
+        }
+      },
+      {
+        "beforeText": "^\\s*%%",
+        "action": {
+          "indent": "none",
+          "appendText": "%% "
+        }
+      },
+      {
+        "beforeText": "^\\s*%",
+        "action": {
+          "indent": "none",
+          "appendText": "% "
+        }
+      }
+    ]
+}
